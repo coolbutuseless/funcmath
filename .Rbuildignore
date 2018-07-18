@@ -1,0 +1,7 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^working$
+^data-raw$
+^README.Rmd$
+^README.html$
+^figure$

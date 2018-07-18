@@ -1,0 +1,16 @@
+Package: funcmath
+Type: Package
+Title: Create Plotmath Expressions
+Version: 0.1.0
+Author: mikefc
+Maintainer: mikefc <mikefc@coolbutuseless.com>
+Description: A collection of functions for creating and manipulating
+    plotmath expressions.
+License: file LICENSE
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.0.1
+Depends:
+    R (>= 2.10)
+Imports:
+    rlang
