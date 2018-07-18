@@ -76,7 +76,7 @@ mylabel <- bquote(Delta*italic(T)[max]~.(format(mymean,digits=3))*''%+-%''*
 ```
 
 
-A plotmath expression created via `funcmath`:
+The same plotmath expression created via `funcmath`:
 
 
 ```r
@@ -129,23 +129,42 @@ The result is more verbose, uglier and requires learning a whole new set of func
 
 
 ```r
-lhs         <- 'f' %*% b('x')
-numerator   <- Gamma %*% b(alpha %+% beta)
-denominator <- (Gamma %*% b(alpha)) %*% (Gamma %*% b(beta))
-right       <- 'x' %^% (alpha %-% 1) %*% b(1 %-% 'x') %^% (beta %-% 1)
-limitx      <- 0 %<=%  'x'  %<=% 1
-limitalpha  <- 0 %<<% alpha %<<% infinity
-limitbeta   <- 0 %<<% beta  %<<% infinity
+lhs          <- 'f' %*% b('x')
+numerator    <- Gamma %*% b(alpha %+% beta)
+denominator  <- (Gamma %*% b(alpha)) %*% (Gamma %*% b(beta))
+right        <- 'x' %^% (alpha %-% 1) %*% b(1 %-% 'x') %^% (beta %-% 1)
+limitx       <- 0 %<=%  'x'  %<=% 1
+limitalpha   <- 0 %<<% alpha %<<% infinity
+limitbeta    <- 0 %<<% beta  %<<% infinity
 
-limits <- list_(limitx, limitalpha, limitbeta)
+limits       <- list_(limitx, limitalpha, limitbeta)
 
-total  <- lhs %eq% (numerator %frac% denominator) %*% right %space4% limits 
+total        <- lhs %eq% (numerator %frac% denominator) %*% right %space4% limits 
 
-italic(displaystyle(total)) %>% mplot(cex=1.25)
+styled_total <- italic(displaystyle(total))
+
+
+mplot(styled_total, cex=1.25)
 ```
 
 ![plot of chunk unnamed-chunk-9](figure/unnamed-chunk-9-1.png)
 
+
+
+Turn the expression back into a parseable string
+------------------------------------------------------------------------------
+
+It is possible to turn the created plotmath back into a parseable character string.
+
+
+```r
+pstring <- as_parseable_string(styled_total) 
+cat(pstring)
+```
+
+```
+## italic(displaystyle((f * (x) == frac(Gamma * (alpha + beta), Gamma * (alpha) * (Gamma * (beta)))) * (x^(alpha - 1) * (1 - x))^(beta - 1) ~ (~~~list(list((0 <= x) <= 1, (0 < alpha) < infinity), (0 < beta) < infinity))))
+```
 
 
 
@@ -154,8 +173,6 @@ Issues
 
 * There are a **lot** of namespace clashes e.g. `list`, `paste`, `%*%` etc.
 * Some names have an appended underscore to avoid clashing with a builtin/common 
-  function i.e. `list_` instead of `list`
-* I stored all the symbols/glyphs in a list structure named `g`.  This isn't 
-  particularly elegant, but it avoids some of namespace polution.
+  function i.e. `list_` instead of `list`.
 
 

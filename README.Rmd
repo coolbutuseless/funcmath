@@ -81,7 +81,7 @@ mylabel <- bquote(Delta*italic(T)[max]~.(format(mymean,digits=3))*''%+-%''*
 ```
 
 
-A plotmath expression created via `funcmath`:
+The same plotmath expression created via `funcmath`:
 
 ```{r}
 Delta %*% 
