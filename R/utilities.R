@@ -32,11 +32,11 @@ combine_expressions <- function(..., sep=" ") {
   exps <- list(...)
   exps <- lapply(exps, function(x) {if (is.expression(x)) {as.call(x)[[1]]} else {x}})
   if (sep == ' ') {
-    exps <- Reduce(function(x, y) bquote(.(x) ~ .(y)), exps[-1], init=exps[[1]])
+    exps <- Reduce(function(x, y) bquote({.(x)} ~ {.(y)}), exps[-1], init=exps[[1]])
   } else if (sep == '') {
-    exps <- Reduce(function(x, y) bquote(.(x) * .(y)), exps[-1], init=exps[[1]])
+    exps <- Reduce(function(x, y) bquote({.(x)} * {.(y)}), exps[-1], init=exps[[1]])
   } else if (sep == ',') {
-    exps <- Reduce(function(x, y) bquote(list(.(x), .(y))), exps[-1], init=exps[[1]])
+    exps <- Reduce(function(x, y) bquote(list({.(x)}, {.(y)})), exps[-1], init=exps[[1]])
   }
   exps
 }
@@ -58,7 +58,11 @@ as_parseable_string <- function(e) {
     # but because I pass text arguments in as character, they remain as character.
     # Unfortunately, this means that they're surrounded by double-quotes when
     # deparsed. So I'm just going to hack around it with a gsub
-    gsub('\\"', '', rlang::expr_deparse(e, width=1000))
+    x <- rlang::expr_deparse(e, width=1000)
+    x <- paste(x, collapse="")
+    x <- gsub('\\"', '', x)
+    x <- gsub('\\s+','', x)
+    x
   }
 
 

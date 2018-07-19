@@ -75,7 +75,7 @@ A plotmath expression created using `bquote()`:
 # http://lukemiller.org/index.php/2017/05/r-plotmath-functions-combined-with-variable-values/
 mymean  <- 1.2345678
 mySE    <- 0.55555
-mylabel <- bquote(Delta*italic(T)[max]~.(format(mymean,digits=3))*''%+-%''*
+mylabel <- bquote(Delta*italic(T)[max]~.(format(mymean,digits=3))*'%+-%'*
                 .(format(mySE,digits=2))*degree*C)
 # mplot(mylabel, cex=2)
 ```
@@ -126,15 +126,15 @@ The result is more verbose, uglier and requires learning a whole new set of func
 ```{r}
 lhs          <- 'f' %*% b('x')
 numerator    <- Gamma %*% b(alpha %+% beta)
-denominator  <- (Gamma %*% b(alpha)) %*% (Gamma %*% b(beta))
-right        <- 'x' %^% (alpha %-% 1) %*% b(1 %-% 'x') %^% (beta %-% 1)
+denominator  <- {Gamma %*% b(alpha)} %*% {Gamma %*% b(beta)}
+right        <- 'x' %^% {alpha %-% 1} %*% b(1 %-% 'x') %^% {beta %-% 1}
 limitx       <- 0 %<=%  'x'  %<=% 1
 limitalpha   <- 0 %<<% alpha %<<% infinity
 limitbeta    <- 0 %<<% beta  %<<% infinity
 
 limits       <- list_(limitx, limitalpha, limitbeta)
 
-total        <- lhs %eq% (numerator %frac% denominator) %*% right %space4% limits 
+total        <- {lhs %eq% (numerator %frac% denominator) %*% right} %space4% {limits}
 
 styled_total <- italic(displaystyle(total))
 
@@ -153,6 +153,115 @@ It is possible to turn the created plotmath back into a parseable character stri
 pstring <- as_parseable_string(styled_total) 
 cat(pstring)
 ```
+
+And then you can use that in ggplot `geom_text` (for example):
+
+```{r}
+withr::with_package('ggplot2', {
+  ggplot(mtcars) +
+    geom_point(aes(mpg, wt), alpha=0.3) + 
+    geom_text(x=20, y=3, label=pstring, parse = TRUE) + 
+    theme_bw() 
+})
+```
+
+
+Full list of plotmath functions and infix operators
+------------------------------------------------------------------------------
+
+```{r echo=FALSE}
+funcs <- readr::read_delim("
+plotmath                    :  funcmath                           : infix
+x +    y                    :  plus(x, y)                         : %+%
+x -    y                    :  minus(x, y)                        : %-%
+x *    y                    :  juxtapose(x, y)                    : %*%
+x /    y                    :  forwardslash(x, y)                 : %/%
+x %+-% y                    :  plusminus(x, y)                    : %+-%
+x %/%  y                    :  divide(x, y)                       : %//%
+x %*%  y                    :  times(x, y)                        : %x%
+x %.%  y                    :  cdot(x, y)                         : %.%
+-x                          :  neg(x)                             :
++x                          :  pos(x)                             :
+x[y]                        :  subscript(x, y)                    : %subscript%, %_%
+x ^ y                       :  superscript(x, y)                  : %superscript%, %^%
+sqrt(x, y)                  :  sqrt_(x, y=NULL)                   :
+x ==     y                  :  eq(x, y)                           :  %eq%
+x !=     y                  :  neq(x, y)                          :  %neq%
+x <      y                  :  lt(x, y)                           :  %<<%
+x <=     y                  :  le(x, y)                           :  %<=%
+x >      y                  :  gt(x, y)                           :  %>>%
+x >=     y                  :  ge(x, y)                           :  %>=%
+x %~~%   y                  :  approximate(x, y)                  :  %~~%
+x %=~%   y                  :  congruent(x, y)                    :  %=~%
+x %==%   y                  :  defined(x, y)                      :  %==%
+x %prop% y                  :  proportional(x, y)                 :  %prop%
+x %~%    y                  :  distributed(x, y)                  :  %~%
+!x                          :  not(x)                             :
+plain     (x)               :  plain(x)                           :
+bold      (x)               :  bold(x)                            :
+italic    (x)               :  italic(x)                          :
+bolditalic(x)               :  bolditalic(x)                      :
+bolditalic(x)               :  underline(x)                       :
+symbol    (x)               :  symbol(x)                          :
+x %subset%    y             :  subset(x, y)                       :  %subset%
+x %subseteq%  y             :  subseteq(x, y)                     :  %subseteq%
+x %notsubset% y             :  notsubset(x, y)                    :  %notsubset%
+x %supset%    y             :  supset(x, y)                       :  %supset%
+x %supseteq%  y             :  supseteq(x, y)                     :  %supseteq%
+x %in%        y             :  in_(x, y)                          :  %in_%
+x %notin%     y             :  notin(x, y)                        :  %notin%
+hat      (x)                :  hat(x)                             :
+tilde    (x)                :  tilde(x)                           :
+ring     (x)                :  ring(x)                            :
+bar      (x)                :  bar(x)                             :
+widehat  (x)                :  widehat(x)                         :
+widetilde(x)                :  widetilde(x)                       :
+x %=>%      y               :  double_arrow(x, y)                 :   %<->%
+x %->%      y               :  right_arrow(x, y)                  :   %->%
+x %<-%      y               :  left_arrow(x, y)                   :   %<-%
+x %up%      y               :  up_arrow(x, y)                     :   %up%
+x %down%    y               :  down_arrow(x, y)                   :   %down%
+x %<=>%     y               :  dbldbl(x, y)                       :   %<=>%
+x %=>%      y               :  dblright(x, y)                     :   %=>>%
+x %<=%      y               :  dblleft(x, y)                      :   %<<=%
+x %dblup%   y               :  dblup(x, y)                        :   %dblup%
+x %dbldown% y               :  dbldown(x, y)                      :   %dbldown%
+displaystyle(x)             :  displaystyle(x)                    :
+textstyle(x)                :  textstyle(x)                       :
+scriptstyle(x)              :  scriptstyle(x)                     :
+scriptscriptstyle(x)        :  scriptscriptstyle(x)               :
+phantom(x)                  :  phantom(x=NULL)                    :
+frac(x, y)                  :  frac(x, y)                         :  %frac%
+over(x, y)                  :  over(x, y)                         :  %over%
+atop(x, y)                  :  atop(x, y)                         :  %atop%
+x ~    y                    :  space(x, y)                        :  %space%
+x ~~   y                    :  space2(x, y)                       :  %space2%
+x ~~~  y                    :  space3(x, y)                       :  %space3%
+x ~~~~ y                    :  space4(x, y)                       :  %space4%
+sum      (x, from, to)      :  sum_(x, from=NULL, to=NULL)        :
+prod     (x, from, to)      :  prod_(x, from=NULL, to=NULL)       :
+integral (x, from, to)      :  integral(x, from=NULL, to=NULL)    :
+union    (x, from, to)      :  union_(x, from=NULL, to=NULL)      :
+intersect(x, from, to)      :  intersect_(x, from=NULL, to=NULL)  :
+lim      (x, from, to)      :  lim(x, from=NULL, to=NULL)         :
+min      (x, from, to)      :  min_(x, from=NULL, to=NULL)        :
+max      (x, from, to)      :  max_(x, from=NULL, to=NULL)        :
+inf(x)                      :  inf(x)                             :
+sup(x)                      :  sup(x)                             :
+group(lceil , x, rceil )    :  ceiling_(x)                        :
+group(lfloor, x, rfloor)    :  floor_(x)                          :
+list(...)                   :  list_(...)                         :
+paste(...)                  :  paste_(...)                        :
+bgroup(x)                   :  B(x), bgroup(x)                    :
+group(x)                    :  G(x), group(x)                     :
+(x)                         :  b(x)                               :
+", delim = ':', quote = "'", skip=1, trim_ws=TRUE)
+
+funcs <- funcs %>% tidyr::replace_na(list(infix = ''))
+
+knitr::kable(funcs, caption="All `funcmath` functions and infix operators and their `plotmath` equivalents")
+```
+
 
 
 
