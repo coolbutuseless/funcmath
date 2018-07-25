@@ -96,7 +96,7 @@ Example #2 - Sierpinski Fractal
 ```r
 s <- function(x) { sub_and_super(x, x, x) }
 
-plot(s(s(s(mu))))
+plot(s(s(s(mu))), cex=3)
 ```
 
 ![plot of chunk unnamed-chunk-7](figure/unnamed-chunk-7-1.png)
@@ -157,13 +157,13 @@ plot(styled_total, cex=1.25)
 
 
 ```r
-plot("alpha * beta")
+plot("alpha * beta", cex=5)
 ```
 
 ![plot of chunk unnamed-chunk-10](figure/unnamed-chunk-10-1.png)
 
 ```r
-plot(bquote(alpha ^ 2))
+plot(bquote(alpha ^ 2), cex=5)
 ```
 
 ![plot of chunk unnamed-chunk-10](figure/unnamed-chunk-10-2.png)
@@ -182,7 +182,7 @@ cat(pstring)
 ```
 
 ```
-## italic({displaystyle({{{{{f}*{({x})}}=={frac({{Gamma}*{({{alpha}+{beta}})}},{{{Gamma}*{({alpha})}}*{{Gamma}*{({beta})}}})}}*{({x^({alpha}-{1})}*{({{1}-{x}})})^({beta}-{1})}}~{~{~{~{list({list({{{0}<={x}}<={1}},{{{0}<{alpha}}<{infinity}})},{{{0}<{beta}}<{infinity}})}}}}})})
+## italic({displaystyle({{{{{f}*{({x})}}=={frac({{Gamma}*{({{alpha}+{beta}})}},{{{Gamma}*{({alpha})}}*{{Gamma}*{({beta})}}})}}*{{{{x}^{{alpha}-{1}}}*{({{1}-{x}})}}^{{beta}-{1}}}}~{~{~{~{list({list({{{0}<={x}}<={1}},{{{0}<{alpha}}<{infinity}})},{{{0}<{beta}}<{infinity}})}}}}})})
 ```
 
 And then you can use that in ggplot `geom_text` (for example):

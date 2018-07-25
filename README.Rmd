@@ -45,7 +45,7 @@ m <- frac(alpha %/% beta, b(1 %+% 2))
 
 
 ```{r eval=TRUE, echo=FALSE}
-plot(m)
+plot(m, cex=5)
 ```
 
 
@@ -97,7 +97,7 @@ Example #2 - Sierpinski Fractal
 ```{r}
 s <- function(x) { sub_and_super(x, x, x) }
 
-plot(s(s(s(mu))))
+plot(s(s(s(mu))), cex=3)
 ```
 
 
@@ -149,8 +149,8 @@ plot(styled_total, cex=1.25)
 `plot()` has been extended to work with `character` and `expression` objects.
 
 ```{r}
-plot("alpha * beta")
-plot(bquote(alpha ^ 2))
+plot("alpha * beta", cex=5)
+plot(bquote(alpha ^ 2), cex=5)
 ```
 
 
