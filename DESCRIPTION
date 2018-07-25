@@ -1,7 +1,7 @@
 Package: funcmath
 Type: Package
 Title: Create Plotmath Expressions
-Version: 0.1.0
+Version: 0.1.1
 Author: mikefc
 Maintainer: mikefc <mikefc@coolbutuseless.com>
 Description: A collection of functions for creating and manipulating
@@ -12,5 +12,3 @@ LazyData: true
 RoxygenNote: 6.0.1
 Depends:
     R (>= 2.10)
-Imports:
-    rlang

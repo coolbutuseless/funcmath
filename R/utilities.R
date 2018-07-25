@@ -2,19 +2,34 @@
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Render a single expression
-#
-# @param e the expression to render
-# @param cex size of the rendered text
-#
-# @importFrom graphics plot text
-# @export
+#' Plot a single expresion
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-mplot <- function(e, cex=5, xlim=c(0, 1), ylim=c(0, 1), ...) {
-  plot(0, type='n', ann = FALSE, axes = FALSE, xlim=xlim, ylim=ylim)
-  text(x=0.5, y=0.5, labels=e, cex=cex, ...)
+plot.expression <- function (x, ...)  {
+  oldpar <- par(no.readonly = TRUE)
+  on.exit(suppressWarnings(par(oldpar)))
+  par(mar = c(0, 0, 0, 0))
+  plot(0, 0, type = "n", axes = FALSE, ann=FALSE)
+  text(0, 0, x, ...)
   invisible()
 }
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#' @rdname plot.expression
+#' @export
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+plot.call <- plot.expression
+
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#' @rdname plot.expression
+#' @export
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+plot.character <- function(x, ...) {
+  plot.expression(parse(text=x), ...)
+}
+
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -58,7 +73,7 @@ as_parseable_string <- function(e) {
     # but because I pass text arguments in as character, they remain as character.
     # Unfortunately, this means that they're surrounded by double-quotes when
     # deparsed. So I'm just going to hack around it with a gsub
-    x <- rlang::expr_deparse(e, width=1000)
+    x <- deparse(e, width.cutoff = 500)
     x <- paste(x, collapse="")
     x <- gsub('\\"', '', x)
     x <- gsub('\\s+','', x)

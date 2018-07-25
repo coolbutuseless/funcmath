@@ -45,7 +45,7 @@ m <- frac(alpha %/% beta, b(1 %+% 2))
 
 
 ```{r eval=TRUE, echo=FALSE}
-mplot(m)
+plot(m)
 ```
 
 
@@ -77,7 +77,7 @@ mymean  <- 1.2345678
 mySE    <- 0.55555
 mylabel <- bquote(Delta*italic(T)[max]~.(format(mymean,digits=3))*'%+-%'*
                 .(format(mySE,digits=2))*degree*C)
-# mplot(mylabel, cex=2)
+# plot(mylabel, cex=2)
 ```
 
 
@@ -87,7 +87,7 @@ The same plotmath expression created via `funcmath`:
 Delta %*% 
   italic('T') %_% 'max' %space% format(mymean,digits=3) %+-% 
   (format(mySE,digits=2) %*% degree) %*% 'C' %>% 
-  mplot(cex=2)
+  plot(cex=2)
 ```
 
 
@@ -95,9 +95,9 @@ Example #2 - Sierpinski Fractal
 ------------------------------------------------------------------------------
 
 ```{r}
-s <- function(x) { x %_% x %^% x }
+s <- function(x) { sub_and_super(x, x, x) }
 
-mplot(s(s(s(mu))))
+plot(s(s(s(mu))))
 ```
 
 
@@ -114,7 +114,7 @@ expr.beta <- expression(italic(paste(displaystyle(f(x)~"="~frac(Gamma(alpha+beta
                     ~~~~displaystyle(list(paste(0<=x) <=1, paste(0<alpha) <infinity, paste(0<beta) <infinity))
                     )))
 
-mplot(expr.beta, cex=1.25)
+plot(expr.beta, cex=1.25)
 ```
 
 
@@ -139,7 +139,18 @@ total        <- {lhs %eq% (numerator %frac% denominator) %*% right} %space4% {li
 styled_total <- italic(displaystyle(total))
 
 
-mplot(styled_total, cex=1.25)
+plot(styled_total, cex=1.25)
+```
+
+
+`plot()`
+------------------------------------------------------------------------------
+
+`plot()` has been extended to work with `character` and `expression` objects.
+
+```{r}
+plot("alpha * beta")
+plot(bquote(alpha ^ 2))
 ```
 
 
@@ -184,6 +195,7 @@ x %.%  y                    :  cdot(x, y)                         : %.%
 +x                          :  pos(x)                             :
 x[y]                        :  subscript(x, y)                    : %subscript%, %_%
 x ^ y                       :  superscript(x, y)                  : %superscript%, %^%
+x[l]^u                      :  sub_and_super(x, l, u)             :
 sqrt(x, y)                  :  sqrt_(x, y=NULL)                   :
 x ==     y                  :  eq(x, y)                           :  %eq%
 x !=     y                  :  neq(x, y)                          :  %neq%

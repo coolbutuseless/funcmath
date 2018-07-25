@@ -25,9 +25,9 @@ pos                      <- function(x)      bquote(+{.(x)})
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Sub/Superscripts
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-subscript     <- '%subscript%'    <-  '%_%'  <- function(x, y)  bquote({.(x)} [{.(y)}])
-superscript   <- '%superscript%'  <-  '%^%'  <- function(x, y)  bquote({.(x)} ^ {.(y)})
-
+subscript     <- '%subscript%'    <-  '%_%'  <- function(x, y)    bquote({.(x)}  [{.(y)}])
+superscript   <- '%superscript%'  <-  '%^%'  <- function(x, y)    bquote({.(x)} ^ {.(y)})
+sub_and_super <-                                function(x, l, u) bquote({.(x)}[{.(l)}] ^ {.(u)})
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Radicals

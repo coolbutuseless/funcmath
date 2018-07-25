@@ -25,6 +25,7 @@
 \alias{superscript}
 \alias{\%superscript\%}
 \alias{\%^\%}
+\alias{sub_and_super}
 \alias{sqrt_}
 \alias{eq}
 \alias{\%eq\%}
@@ -218,6 +219,8 @@ pos(x)
 sum_(x, from = NULL, to = NULL)
 
 bgroup(x, l = "(", r=NULL)
+
+sub_and_super(x, l, u)
 }
 \arguments{
 \item{x, y}{expressions}
@@ -225,6 +228,8 @@ bgroup(x, l = "(", r=NULL)
 \item{from, to}{operator sub- and super-scripts}
 
 \item{l, r}{left and right bracket definitions}
+
+\item{u}{upper}
 }
 \description{
 See \code{?plotmath} for details

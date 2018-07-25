@@ -2,6 +2,14 @@ funcmath
 ==========
 
 
+funcmath v0.1.2 (20180719)
+---------------------------
+
+* Improved plotting with `plot.expression`, `plot.call` and `plot.character`
+* Removed `rlang` dependency
+* Added combined sub/superscript function `sub_and_super`
+
+
 funcmath v0.1.1 (20180719)
 ---------------------------
 

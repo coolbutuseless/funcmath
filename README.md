@@ -72,7 +72,7 @@ mymean  <- 1.2345678
 mySE    <- 0.55555
 mylabel <- bquote(Delta*italic(T)[max]~.(format(mymean,digits=3))*'%+-%'*
                 .(format(mySE,digits=2))*degree*C)
-# mplot(mylabel, cex=2)
+# plot(mylabel, cex=2)
 ```
 
 
@@ -83,7 +83,7 @@ The same plotmath expression created via `funcmath`:
 Delta %*% 
   italic('T') %_% 'max' %space% format(mymean,digits=3) %+-% 
   (format(mySE,digits=2) %*% degree) %*% 'C' %>% 
-  mplot(cex=2)
+  plot(cex=2)
 ```
 
 ![plot of chunk unnamed-chunk-6](figure/unnamed-chunk-6-1.png)
@@ -94,9 +94,9 @@ Example #2 - Sierpinski Fractal
 
 
 ```r
-s <- function(x) { x %_% x %^% x }
+s <- function(x) { sub_and_super(x, x, x) }
 
-mplot(s(s(s(mu))))
+plot(s(s(s(mu))))
 ```
 
 ![plot of chunk unnamed-chunk-7](figure/unnamed-chunk-7-1.png)
@@ -116,7 +116,7 @@ expr.beta <- expression(italic(paste(displaystyle(f(x)~"="~frac(Gamma(alpha+beta
                     ~~~~displaystyle(list(paste(0<=x) <=1, paste(0<alpha) <infinity, paste(0<beta) <infinity))
                     )))
 
-mplot(expr.beta, cex=1.25)
+plot(expr.beta, cex=1.25)
 ```
 
 ![plot of chunk unnamed-chunk-8](figure/unnamed-chunk-8-1.png)
@@ -144,10 +144,29 @@ total        <- {lhs %eq% (numerator %frac% denominator) %*% right} %space4% {li
 styled_total <- italic(displaystyle(total))
 
 
-mplot(styled_total, cex=1.25)
+plot(styled_total, cex=1.25)
 ```
 
 ![plot of chunk unnamed-chunk-9](figure/unnamed-chunk-9-1.png)
+
+
+`plot()`
+------------------------------------------------------------------------------
+
+`plot()` has been extended to work with `character` and `expression` objects.
+
+
+```r
+plot("alpha * beta")
+```
+
+![plot of chunk unnamed-chunk-10](figure/unnamed-chunk-10-1.png)
+
+```r
+plot(bquote(alpha ^ 2))
+```
+
+![plot of chunk unnamed-chunk-10](figure/unnamed-chunk-10-2.png)
 
 
 
@@ -163,7 +182,7 @@ cat(pstring)
 ```
 
 ```
-## italic({displaystyle({{{{{f}*{({x})}}=={frac({{Gamma}*{({{alpha}+{beta}})}},{{{Gamma}*{({alpha})}}*{{Gamma}*{({beta})}}})}}*{{{{x}^{{alpha}-{1}}}*{({{1}-{x}})}}^{{beta}-{1}}}}~{~{~{~{list({list({{{0}<={x}}<={1}},{{{0}<{alpha}}<{infinity}})},{{{0}<{beta}}<{infinity}})}}}}})})
+## italic({displaystyle({{{{{f}*{({x})}}=={frac({{Gamma}*{({{alpha}+{beta}})}},{{{Gamma}*{({alpha})}}*{{Gamma}*{({beta})}}})}}*{({x^({alpha}-{1})}*{({{1}-{x}})})^({beta}-{1})}}~{~{~{~{list({list({{{0}<={x}}<={1}},{{{0}<{alpha}}<{infinity}})},{{{0}<{beta}}<{infinity}})}}}}})})
 ```
 
 And then you can use that in ggplot `geom_text` (for example):
@@ -178,7 +197,7 @@ withr::with_package('ggplot2', {
 })
 ```
 
-![plot of chunk unnamed-chunk-11](figure/unnamed-chunk-11-1.png)
+![plot of chunk unnamed-chunk-12](figure/unnamed-chunk-12-1.png)
 
 
 Full list of plotmath functions and infix operators
@@ -199,6 +218,7 @@ Full list of plotmath functions and infix operators
 |+x                       |pos(x)                            |                   |
 |x[y]                     |subscript(x, y)                   |%subscript%, %_%   |
 |x ^ y                    |superscript(x, y)                 |%superscript%, %^% |
+|x[l]^u                   |sub_and_super(x, l, u)            |                   |
 |sqrt(x, y)               |sqrt_(x, y=NULL)                  |                   |
 |x ==     y               |eq(x, y)                          |%eq%               |
 |x !=     y               |neq(x, y)                         |%neq%              |
