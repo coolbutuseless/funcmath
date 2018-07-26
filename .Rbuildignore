@@ -5,3 +5,5 @@
 ^README.Rmd$
 ^README.html$
 ^figure$
+^README\.Rmd$
+^README-.*\.png$
